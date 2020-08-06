@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Coordinates Recorder
  * Author: libertylocked
  * Version: 1.3
@@ -97,6 +97,11 @@ namespace CoordinateRecorder
                     line = String.Format(CultureInfo.GetCultureInfo("en-US"), "      \"Z\": {0}", pos.Z);
                     sw.WriteLine(line);
                     sw.WriteLine("    },");
+                }
+                using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_CSV.txt", true))
+                {
+                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2}", pos.X, pos.Y, pos.Z);
+                    sw.WriteLine(line);
                 }
                 UI.ShowSubtitle("Coords saved! " + text.Caption, 5000);
             }
