@@ -19,4 +19,4 @@ Updated [CoordRecorder](https://www.gta5-mods.com/tools/coordinates-recorder-net
 
 ### V 1.3
 - Doesn't ask for a name
-- Saves coordinates in json format (just copy/paste to GTBikeV couse file)
+- Saves coordinates in json format (to copy/paste to course file) and csv format (to preview in https://gtagmodding.com/maps/gta5/)
