@@ -39,6 +39,6 @@ Save one more waypoint close to the start point to be used as the start banner.
 
 When finished adding waypoints, use [csv_to_course.py](https://github.com/oldnapalm/CoordRecorder/blob/master/csv_to_course.py) to read the file `CoordRecorder_CSV.txt` and save the file `CoordRecorder_Course.json`
 
-You can copy the coordinates from `CoordRecorder_CSV.txt` and paste in https://gtagmodding.com/maps/gta5/ to view the points on the map.
-
 An [executable release](https://github.com/oldnapalm/CoordRecorder/releases) is also available.
+
+You can copy the coordinates from `CoordRecorder_CSV.txt` and paste in https://gtagmodding.com/maps/gta5/ to view the points on the map.
