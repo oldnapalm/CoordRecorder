@@ -5,7 +5,7 @@ Updated [CoordRecorder](https://www.gta5-mods.com/tools/coordinates-recorder-net
 ## Features
 - Shows coordinates on top center of screen
 - Press F9 (editable) to enable/disable the mod
-- When the mod is enabled, press F10 (editable) to log current coordinates to file `CoordRecorder_Coords.txt`
+- When the mod is enabled, press F10 (editable) to log current coordinates to file
 
 ## Requirements
 - [ScriptHookV](http://www.dev-c.com/gtav/scripthookv/)
@@ -21,7 +21,7 @@ Updated [CoordRecorder](https://www.gta5-mods.com/tools/coordinates-recorder-net
 - [Simple teleport to marker](https://www.gta5-mods.com/scripts/simple-teleport-to-marker-press-x-y)
 - [VAutodrive](https://www.gta5-mods.com/scripts/vautodrive)
 
-Delete the file "CoordRecorder_CSV.txt" when starting a new course.
+Delete the file `CoordRecorder_CSV.txt` when starting a new course.
 
 ### Add the start point
 - Add a waypoint in the map (Esc, choose a location, Enter)
