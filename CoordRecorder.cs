@@ -30,7 +30,6 @@ namespace CoordinateRecorder
         bool enable;
 
         Vector3 pos;
-        UIText nameText;
 
         public CoordRecorder()
         {
@@ -79,8 +78,6 @@ namespace CoordinateRecorder
             container = new UIContainer(new Point(UI.WIDTH / 2 - PANEL_WIDTH / 2, 0), new Size(PANEL_WIDTH, PANEL_HEIGHT), backColor);
             text = new UIText("", new Point(PANEL_WIDTH / 2, 0), 0.42f, textColor, GTA.Font.Pricedown, true);
             container.Items.Add(text);
-
-            nameText = new UIText("", new Point(UI.WIDTH / 2, UI.HEIGHT / 2), 0.5f, Color.White, 0, true);
         }
 
         void WriteToFile()
