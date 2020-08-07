@@ -87,17 +87,6 @@ namespace CoordinateRecorder
         {
             try
             {
-                using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_Coords.txt", true))
-                {
-                    sw.WriteLine("    {");
-                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "      \"X\": {0},", pos.X);
-                    sw.WriteLine(line);
-                    line = String.Format(CultureInfo.GetCultureInfo("en-US"), "      \"Y\": {0},", pos.Y);
-                    sw.WriteLine(line);
-                    line = String.Format(CultureInfo.GetCultureInfo("en-US"), "      \"Z\": {0}", pos.Z);
-                    sw.WriteLine(line);
-                    sw.WriteLine("    },");
-                }
                 using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_CSV.txt", true))
                 {
                     string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2}", pos.X, pos.Y, pos.Z);
