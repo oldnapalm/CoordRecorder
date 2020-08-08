@@ -32,8 +32,11 @@ Delete the file `CoordRecorder_CSV.txt` when starting a new course.
 Save one more waypoint close to the start point to be used as the start banner.
 
 ### Add waypoints
-- Add a waypoint in the map (use the map zoom when placing the waypoint and make sure the GPS route is fine)
-- Press J to auto drive to the waypoint (press Right/Left to go faster/slower, press Shift+Right/Left to change driving style)
+- Add a waypoint in the map
+  - Use the map zoom when placing the waypoint and make sure the GPS route is fine
+- Press J to auto drive to the waypoint
+  - Press `Right`/`Left` to go faster/slower
+  - Press `Shift`+`Right`/`Left` to change driving style
   - We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
 - Press F10 to save current coordinates to file
 
