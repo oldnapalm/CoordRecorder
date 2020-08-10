@@ -29,7 +29,7 @@ Delete the file `CoordRecorder_CSV.txt` when starting a new course.
 - Press `F9` to view current coordinates
 - Press `F10` to save to file
 
-Save one more waypoint close to the start point to be used as the start banner.
+Save one more point close to the start point to be used as the start banner. Player heading will be used for banner rotation.
 
 ### Add waypoints
 - Add a waypoint in the map
@@ -39,6 +39,8 @@ Save one more waypoint close to the start point to be used as the start banner.
   - Press `Shift`+`Right`/`Left` to change driving style
   - We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
 - Press `F10` to save current coordinates to file
+
+The last saved point will be used as the finish banner. Player heading will be used for banner rotation.
 
 When finished adding waypoints, use [csv_to_course.py](https://github.com/oldnapalm/CoordRecorder/blob/master/csv_to_course.py) to read the file `CoordRecorder_CSV.txt` and save the file `CoordRecorder_Course.json`
 
