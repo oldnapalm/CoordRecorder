@@ -14,6 +14,9 @@ json_file = os.path.join(SCRIPT_DIR, 'CoordRecorder_Course.json')
 def point(c):
     return { 'X': float(c[0]), 'Y': float(c[1]), 'Z': float(c[2]) }
 
+def heading(c):
+    return { 'X': 0.0, 'Y': 0.0, 'Z': float(c[3]) }
+
 if os.path.isfile(csv_file):
     with open(csv_file, 'r') as fd:
         coords = [tuple(line) for line in csv.reader(fd)]
@@ -27,9 +30,9 @@ data = {}
 data['Name'] = "CoordRecorder_Course"
 data['StartPoint'] = point(coords[0])
 data['Props'] = []
-start = { 'Name': 'prop_tri_start_banner', 'Position': point(coords[1]), 'Rotation': point([0, 0, 0]) }
+start = { 'Name': 'prop_tri_start_banner', 'Position': point(coords[1]), 'Rotation': heading(coords[1]) }
 data['Props'].append(start)
-finish = { 'Name': 'prop_tri_finish_banner', 'Position': point(coords[-1]), 'Rotation': point([0, 0, 0]) }
+finish = { 'Name': 'prop_tri_finish_banner', 'Position': point(coords[-1]), 'Rotation': heading(coords[-1]) }
 data['Props'].append(finish)
 del coords[0:2]
 del coords[-1]
