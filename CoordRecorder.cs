@@ -30,6 +30,7 @@ namespace CoordinateRecorder
         bool enable;
 
         Vector3 pos;
+        float heading;
 
         public CoordRecorder()
         {
@@ -47,7 +48,7 @@ namespace CoordinateRecorder
                 {
                     // get coords
                     pos = player.Character.Position;
-                    float heading = player.Character.Heading;
+                    heading = player.Character.Heading;
 
                     text.Caption = String.Format("x:{0} y:{1} z:{2} angle:{3}", pos.X.ToString("0.000"),
                         pos.Y.ToString("0.000"), pos.Z.ToString("0.000"), heading.ToString("0.000"));
@@ -86,7 +87,7 @@ namespace CoordinateRecorder
             {
                 using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_CSV.txt", true))
                 {
-                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2}", pos.X, pos.Y, pos.Z);
+                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2},{3}", pos.X, pos.Y, pos.Z, heading);
                     sw.WriteLine(line);
                 }
                 UI.ShowSubtitle("Coords saved! " + text.Caption, 5000);
