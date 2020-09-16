@@ -18,6 +18,7 @@ Updated [CoordRecorder](https://www.gta5-mods.com/tools/coordinates-recorder-net
 ## Creating GTBikeV courses
 
 ### Used mods
+- [CoordRecorder](https://github.com/oldnapalm/CoordRecorder/releases)
 - [Simple teleport to marker](https://www.gta5-mods.com/scripts/simple-teleport-to-marker-press-x-y)
 - [VAutodrive](https://www.gta5-mods.com/scripts/vautodrive)
 
