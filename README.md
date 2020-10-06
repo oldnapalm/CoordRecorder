@@ -20,7 +20,7 @@ Updated [CoordRecorder](https://www.gta5-mods.com/tools/coordinates-recorder-net
 ### Used mods
 - [CoordRecorder](https://github.com/oldnapalm/CoordRecorder/releases)
 - [Simple teleport to marker](https://www.gta5-mods.com/scripts/simple-teleport-to-marker-press-x-y)
-- [VAutodrive](https://www.gta5-mods.com/scripts/vautodrive)
+- [VAutodrive](https://www.gta5-mods.com/scripts/vautodrive) (optional)
 
 Delete the file `CoordRecorder_CSV.txt` when starting a new course.
 
@@ -38,7 +38,8 @@ Save one more point close to the start point to be used as the start banner. Pla
 - Press `J` to auto drive to the waypoint
   - Press `Right`/`Left` to go faster/slower
   - Press `Shift`+`Right`/`Left` to change driving style
-  - We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
+- You can also ride to the waypoint using GTBikeV auto drive (version 0.4 and up)
+- We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
 - Press `F10` to save current coordinates to file
 
 The last saved point will be used as the finish banner. Player heading will be used for banner rotation.
@@ -48,3 +49,6 @@ When finished adding waypoints, use [csv_to_course.py](https://github.com/oldnap
 An [executable release](https://github.com/oldnapalm/CoordRecorder/releases) is also available.
 
 You can copy the coordinates from `CoordRecorder_CSV.txt` and paste in https://gtagmodding.com/maps/gta5/ to view the points on the map.
+
+### Tutorial video
+[![Tutorial video](https://img.youtube.com/vi/bn2AqiYv2Ng/0.jpg)](https://www.youtube.com/watch?v=bn2AqiYv2Ng)
