@@ -62,5 +62,5 @@ You can copy the coordinates from `CoordRecorder_CSV.txt` and paste in https://g
   - The speed is adjusted when the rider is climbing or descending, so the simulation should be a bit more realistic than using constant power, since we usually put more power on climbs and less on downhill
 - Once you have created the correct fit, replace the temporary one and delete the files `1000-1.0.0-map.png` and `1000-1.0.0-prf.png` so they are re-created using the new fit
 - When the course is finished, rename the files using a proper ID and version number, and edit the file `courses.json` accordingly
-  {"Id":**1000**,"Name":"**Course name**","Author":{"Name":"**Your name**"},"Distance":19.7421989,"ElevationGain":175,"ElevationLoss":175,"MaxElevation":67,"Description":"**Description**","Notes":"**Notes**","Version":"**1.0.0**","Type":[**"bike","run"**],"Category":[**"Gravel","Road"**]}
+  `{"Id":1000,"Version":"1.0.0"}`
 - Now you can create a new `1000-1.0.0` course to be tested
