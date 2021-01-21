@@ -5,30 +5,31 @@ Updated [CoordRecorder](https://www.gta5-mods.com/tools/coordinates-recorder-net
 ## Features
 - Shows coordinates on top center of screen
 - Press `F9` (editable) to enable/disable the mod
-- When the mod is enabled, press `F10` (editable) to log current coordinates to file
+- When the mod is enabled
+  - Press `F10` (editable) to log current coordinates to file
+  - Press `F8` (editable) to teleport to selected waypoint
 
 ## Requirements
 - [ScriptHookV](http://www.dev-c.com/gtav/scripthookv/)
 - [ScriptHookVDotNet](https://github.com/crosire/scripthookvdotnet/releases)
 
 ## Installation
-- Put `CoordRecorder.cs` and `CoordRecorder.ini` in `scripts` folder
+- Put `CoordRecorder.dll` and `CoordRecorder.ini` in `scripts` folder
 - Open `CoordRecorder.ini` and change the toggle key and save key
 
 ## Creating GTBikeV courses
 
 ### Used mods
-- [CoordRecorder](https://github.com/oldnapalm/CoordRecorder/releases)
-- [Simple teleport to marker](https://www.gta5-mods.com/scripts/simple-teleport-to-marker-press-x-y)
+- [CoordRecorder](https://github.com/oldnapalm/CoordRecorder/releases/latest)
 - [VAutodrive](https://www.gta5-mods.com/scripts/vautodrive) (optional)
 
 Delete the file `CoordRecorder_CSV.txt` when starting a new course.
 
 ### Add the start point
+- Press `F9` to enable the mod
 - Add a waypoint in the map (`Esc`, choose a location, `Enter`)
-- Press `X`+`Y` to teleport to the waypoint
-- Press `F9` to view current coordinates
-- Press `F10` to save to file
+- Press `F8` to teleport to the waypoint
+- Press `F10` to save coords to file
 
 Save one more point close to the start point to be used as the start banner. Player heading will be used for banner rotation.
 
