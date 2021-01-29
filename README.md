@@ -42,6 +42,12 @@ Save a waypoint close to (or aligned with) the start banner, because the rider w
 - We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
 - Press `F10` to save coords to file
 
+The last saved point will be used as the finish banner. Player heading will be used for banner rotation.
+
+When finished adding waypoints, use `csv_to_course` to read the file `CoordRecorder_CSV.txt` and save the file `CoordRecorder_Course.json`
+
+You can copy the coordinates from `CoordRecorder_CSV.txt` and paste in https://gtagmodding.com/maps/gta5/ to view the points on the map.
+
 ## Testing courses
 
 - Rename your new files to `1000-1.0.0.json` and `1000-1.0.0.fit`, and drop them into the `ModSettings` folder
