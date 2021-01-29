@@ -20,7 +20,6 @@ namespace CoordinateRecorder
         TextElement text;
         Keys enableKey;
         Keys saveKey;
-        Keys teleportKey;
         bool enable;
 
         Vector3 pos;
@@ -52,14 +51,14 @@ namespace CoordinateRecorder
         void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == enableKey)
-                enable = !enable;
-            if (enable)
             {
-                if (e.KeyCode == saveKey)
-                    WriteToFile();
-                else if (e.KeyCode == teleportKey)
+                if (e.Modifiers == Keys.Shift)
                     Teleport();
+                else
+                    enable = !enable;
             }
+            if (enable && e.KeyCode == saveKey)
+                WriteToFile(!(e.Modifiers == Keys.Shift));
         }
 
         void LoadSettings()
@@ -68,20 +67,19 @@ namespace CoordinateRecorder
             this.enable = settings.GetValue<bool>("Core", "Enable", false);
             this.enableKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue<string>("Core", "EnableKey", "F9"), true);
             this.saveKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue<string>("Core", "SaveKey", "F10"), true);
-            this.teleportKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue<string>("Core", "TeleportKey", "F8"), true);
 
             container = new ContainerElement(new Point((int)GTA.UI.Screen.Width / 2 - PANEL_WIDTH / 2, 0), new Size(PANEL_WIDTH, PANEL_HEIGHT), backColor);
             text = new TextElement("", new Point(PANEL_WIDTH / 2, 0), 0.42f, textColor, GTA.UI.Font.Pricedown, Alignment.Center);
             container.Items.Add(text);
         }
 
-        void WriteToFile()
+        void WriteToFile(bool routed)
         {
             try
             {
                 using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_CSV.txt", true))
                 {
-                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2},{3}", pos.X, pos.Y, pos.Z, heading);
+                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2},{3},{4}", pos.X, pos.Y, pos.Z, heading, routed);
                     sw.WriteLine(line);
                 }
                 Notification.Show("Coords saved! " + text.Caption);

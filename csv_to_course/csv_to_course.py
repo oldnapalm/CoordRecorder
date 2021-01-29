@@ -1,6 +1,7 @@
 import os, sys
 import csv
 import json
+import argparse
 
 if getattr(sys, 'frozen', False):
     # If we're running as a pyinstaller bundle
@@ -8,14 +9,37 @@ if getattr(sys, 'frozen', False):
 else:
     SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 
-csv_file = os.path.join(SCRIPT_DIR, 'CoordRecorder_CSV.txt')
-json_file = os.path.join(SCRIPT_DIR, 'CoordRecorder_Course.json')
+parser = argparse.ArgumentParser()
+parser.add_argument("--input", "-i", type=str, required=False, default=os.path.join(SCRIPT_DIR, 'CoordRecorder_CSV.txt'))
+parser.add_argument("--output", "-o", type=str, required=False, default=os.path.join(SCRIPT_DIR, 'CoordRecorder_Course.json'))
+parser.add_argument("--offset_x", "-ox", type=float, required=False, default=0.0)
+parser.add_argument("--offset_y", "-oy", type=float, required=False, default=0.0)
+parser.add_argument("--offset_z", "-oz", type=float, required=False, default=0.0)
+args = parser.parse_args()
+
+csv_file = args.input
+json_file = args.output
+ox = args.offset_x
+oy = args.offset_y
+oz = args.offset_z
 
 def point(c):
-    return { 'X': float(c[0]), 'Y': float(c[1]), 'Z': float(c[2]) }
+    p = { 'X': float(c[0]) + ox, 'Y': float(c[1]) + oy, 'Z': float(c[2]) + oz }
+    try:
+        if c[4] == 'False':
+            p['Routed'] = c[4]
+    except IndexError:
+        pass
+    return p
 
 def heading(c):
-    return { 'X': 0.0, 'Y': 0.0, 'Z': float(c[3]) }
+    h = { 'X': 0.0, 'Y': 0.0, 'Z': 0.0 }
+    try:
+        if c[3]:
+            h['Z'] = float(c[3])
+    except IndexError:
+        pass
+    return h
 
 if os.path.isfile(csv_file):
     with open(csv_file, 'r') as fd:
