@@ -11,14 +11,13 @@ else:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input", "-i", type=str, required=False, default=os.path.join(SCRIPT_DIR, 'CoordRecorder_CSV.txt'))
-parser.add_argument("--output", "-o", type=str, required=False, default=os.path.join(SCRIPT_DIR, 'CoordRecorder_Course.json'))
+parser.add_argument("--name", "-n", type=str, required=False)
 parser.add_argument("--offset_x", "-ox", type=float, required=False, default=0.0)
 parser.add_argument("--offset_y", "-oy", type=float, required=False, default=0.0)
 parser.add_argument("--offset_z", "-oz", type=float, required=False, default=0.0)
 args = parser.parse_args()
 
 csv_file = args.input
-json_file = args.output
 ox = args.offset_x
 oy = args.offset_y
 oz = args.offset_z
@@ -51,7 +50,13 @@ else:
     sys.exit()
 
 data = {}
-data['Name'] = "CoordRecorder_Course"
+if args.name:
+    name = args.name
+else:
+    name = input("Course name: ")
+if not name:
+    name = 'CoordRecorder_Course'
+data['Name'] = name
 data['StartPoint'] = point(coords[0])
 data['Props'] = []
 start = { 'Name': 'prop_tri_start_banner', 'Position': point(coords[1]), 'Rotation': heading(coords[1]) }
@@ -64,6 +69,7 @@ data['WayPointList'] = []
 for c in coords:
     data['WayPointList'].append(point(c))
 
+json_file = name + '.json'
 with open(json_file, 'w', encoding='utf-8') as fd:
     json.dump(data, fd, indent=2)
 
