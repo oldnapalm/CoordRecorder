@@ -58,7 +58,16 @@ namespace CoordinateRecorder
                     enable = !enable;
             }
             if (enable && e.KeyCode == saveKey)
-                WriteToFile(!(e.Modifiers == Keys.Shift));
+            {
+                if (e.Modifiers == (Keys.Control | Keys.Shift))
+                    WriteToFile(10, false);
+                else if (e.Modifiers == Keys.Control)
+                    WriteToFile(10, true);
+                else if (e.Modifiers == Keys.Shift)
+                    WriteToFile(20, false);
+                else
+                    WriteToFile(20, true);
+            }
         }
 
         void LoadSettings()
@@ -73,13 +82,13 @@ namespace CoordinateRecorder
             container.Items.Add(text);
         }
 
-        void WriteToFile(bool routed)
+        void WriteToFile(float closeby, bool routed)
         {
             try
             {
                 using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_CSV.txt", true))
                 {
-                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2},{3},{4}", pos.X, pos.Y, pos.Z, heading, routed);
+                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2},{3},{4},{5}", pos.X, pos.Y, pos.Z, heading, closeby, routed);
                     sw.WriteLine(line);
                 }
                 Notification.Show("Coords saved! " + text.Caption);

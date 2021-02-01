@@ -27,18 +27,20 @@ oz = args.offset_z
 def point(c):
     p = { 'X': float(c[0]) + ox, 'Y': float(c[1]) + oy, 'Z': float(c[2]) + oz }
     try:
-        if c[4] == 'False':
-            p['Routed'] = c[4]
-    except IndexError:
+        closeby = float(c[4])
+        if closeby != 20 and closeby > 0:
+            p['CloseByRange'] = closeby
+        if c[5] == 'False':
+            p['Routed'] = c[5]
+    except:
         pass
     return p
 
 def heading(c):
     h = { 'X': 0.0, 'Y': 0.0, 'Z': 0.0 }
     try:
-        if c[3]:
-            h['Z'] = float(c[3])
-    except IndexError:
+        h['Z'] = float(c[3])
+    except:
         pass
     return h
 
