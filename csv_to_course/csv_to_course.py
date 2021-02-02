@@ -82,11 +82,14 @@ print(f'File {json_file} saved.')
 clipboard = ''
 for name, c in enumerate(coords):
     model = ''
-    if c[5] == 'False':
-        model = 'Unrouted'
-    closeby = float(c[4])
-    if closeby != 20 and closeby > 0:
-        model += f'\tClose-by\t{closeby}'
+    try:
+        if c[5] == 'False':
+            model = 'Unrouted'
+        closeby = float(c[4])
+        if closeby != 20 and closeby > 0:
+            model += f'\tClose-by\t{closeby}'
+    except:
+        pass
     clipboard += f'{c[0]},{c[1]},{c[2]},{name},{model}\n'
 pyperclip.copy(clipboard)
 
