@@ -2,6 +2,7 @@ import os, sys
 import csv
 import json
 import argparse
+import pyperclip
 
 if getattr(sys, 'frozen', False):
     # If we're running as a pyinstaller bundle
@@ -77,5 +78,19 @@ with open(json_file, 'w', encoding='utf-8') as fd:
     json.dump(data, fd, indent=2)
 
 print(f'File {json_file} saved.')
+
+clipboard = ''
+for name, c in enumerate(coords):
+    model = ''
+    if c[5] == 'False':
+        model = 'Unrouted'
+    closeby = float(c[4])
+    if closeby != 20 and closeby > 0:
+        model += f'\tClose-by\t{closeby}'
+    clipboard += f'{c[0]},{c[1]},{c[2]},{name},{model}\n'
+pyperclip.copy(clipboard)
+
+print('Data for https://gtagmodding.com/maps/gta5/ copied to clipboard.')
+
 if getattr(sys, 'frozen', False):
     input()

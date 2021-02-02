@@ -45,7 +45,7 @@ The last saved point will be used as the finish banner. Player heading will be u
 
 When finished adding waypoints, use `csv_to_course` to read the file `CoordRecorder_CSV.txt` and save the file `1000-1.0.0.json`
 
-You can copy the coordinates from `CoordRecorder_CSV.txt` and paste in https://gtagmodding.com/maps/gta5/ to view the points on the map.
+`csv_to_course` copies the formatted data to the clipboard, you can paste it in https://gtagmodding.com/maps/gta5/ (multi-find) to view the points on the map.
 
 ## Testing courses
 
