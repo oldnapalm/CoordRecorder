@@ -47,6 +47,8 @@ When finished adding waypoints, use `csv_to_course` to read the file `CoordRecor
 
 `csv_to_course` copies the formatted data to the clipboard, you can paste it in https://gtagmodding.com/maps/gta5/ (multi-find) to view the points on the map.
 
+[![Map](https://github.com/oldnapalm/CoordRecorder/blob/master/images/map.png?raw=true)](https://gtagmodding.com/maps/gta5/)
+
 ## Testing courses
 
 - Drop the file `1000-1.0.0.json` into the `ModSettings` folder
