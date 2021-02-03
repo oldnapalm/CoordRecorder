@@ -61,3 +61,6 @@ When finished adding waypoints, use `csv_to_course` to read the file `CoordRecor
   ```
   {"Id":1000,"Version":"1.0.0"}
   ```
+
+## Tutorial video
+[![Tutorial video](https://img.youtube.com/vi/yNPSU6sPo9c/0.jpg)](https://www.youtube.com/watch?v=yNPSU6sPo9c)
