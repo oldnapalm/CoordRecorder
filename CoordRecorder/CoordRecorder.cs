@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
@@ -11,10 +13,12 @@ namespace CoordinateRecorder
 {
     public class CoordRecorder : Script
     {
-        const int PANEL_WIDTH = 340;
+        const int PANEL_WIDTH = 360;
         const int PANEL_HEIGHT = 20;
         Color backColor = Color.FromArgb(100, 255, 255, 255);
         Color textColor = Color.Black;
+        const string CSV_FILE = @".\scripts\CoordRecorder_CSV.txt";
+        CultureInfo cInfo = CultureInfo.GetCultureInfo("en-US");
 
         ContainerElement container;
         TextElement text;
@@ -24,6 +28,9 @@ namespace CoordinateRecorder
 
         Vector3 pos;
         float heading;
+        List<Checkpoint> cpList = new List<Checkpoint>();
+        List<Blip> bList = new List<Blip>();
+        int next;
 
         public CoordRecorder()
         {
@@ -41,8 +48,8 @@ namespace CoordinateRecorder
                 {
                     pos = player.Character.Position;
                     heading = player.Character.Heading;
-                    text.Caption = String.Format("x:{0} y:{1} z:{2} angle:{3}", pos.X.ToString("0.000"),
-                        pos.Y.ToString("0.000"), pos.Z.ToString("0.000"), heading.ToString("0.000"));
+                    text.Caption = String.Format("next:{0} x:{1} y:{2} z:{3} heading:{4}", next, pos.X.ToString("0.0"),
+                                                 pos.Y.ToString("0.0"), pos.Z.ToString("0.0"), heading.ToString("0.0"));
                     container.Draw();
                 }
             }
@@ -53,20 +60,99 @@ namespace CoordinateRecorder
             if (e.KeyCode == enableKey)
             {
                 if (e.Modifiers == Keys.Shift)
-                    Teleport();
+                {
+                    if (Game.IsWaypointActive)
+                        Teleport(World.WaypointPosition);
+                    else
+                        Notification.Show("Select teleport destination");
+                }
+                else if (e.Modifiers == (Keys.Control | Keys.Shift))
+                {
+                    var last = GetLastCheckpoint();
+                    if (last != Vector3.Zero)
+                        Teleport(last);
+                }
                 else
+                {
                     enable = !enable;
+                    if (enable)
+                    {
+                        var last = GetLastCheckpoint();
+                        if (last != Vector3.Zero)
+                        {
+                            Teleport(last);
+                            var lines = File.ReadAllLines(CSV_FILE);
+                            for (int i = 9; i >= 0; i--)
+                            {
+                                if (lines.Length > i)
+                                {
+                                    var line = lines[lines.Length - i - 1].Split(',');
+                                    if (line.Length >= 3)
+                                    {
+                                        var cp = new Vector3(float.Parse(line[0], cInfo), float.Parse(line[1], cInfo), float.Parse(line[2], cInfo));
+                                        AddCheckpoint(cp, lines.Length - i, !(line.Length >= 6 && line[5] == "False"));
+                                    }
+                                }
+                            }
+                            for (int i = 0; i < lines.Length; i++)
+                            {
+                                var line = lines[i].Split(',');
+                                if (line.Length >= 3)
+                                {
+                                    var b = new Vector3(float.Parse(line[0], cInfo), float.Parse(line[1], cInfo), float.Parse(line[2], cInfo));
+                                    AddBlip(b, i + 1, !(line.Length >= 6 && line[5] == "False"));
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (Checkpoint cp in cpList)
+                            cp.Delete();
+                        cpList.Clear();
+                        foreach (Blip b in bList)
+                            b.Delete();
+                        bList.Clear();
+                    }
+                }
             }
-            if (enable && e.KeyCode == saveKey)
+            if (enable)
             {
-                if (e.Modifiers == (Keys.Control | Keys.Shift))
-                    WriteToFile(10, false);
-                else if (e.Modifiers == Keys.Control)
-                    WriteToFile(10, true);
-                else if (e.Modifiers == Keys.Shift)
-                    WriteToFile(20, false);
-                else
-                    WriteToFile(20, true);
+                if (e.KeyCode == saveKey)
+                {
+                    if (e.Modifiers == (Keys.Control | Keys.Shift))
+                        WriteToFile(10, false);
+                    else if (e.Modifiers == Keys.Control)
+                        WriteToFile(10, true);
+                    else if (e.Modifiers == Keys.Shift)
+                        WriteToFile(20, false);
+                    else
+                        WriteToFile(20, true);
+                }
+                else if (e.KeyCode == Keys.Back && e.Modifiers == Keys.Shift)
+                {
+                    if (cpList.Count > 0)
+                    {
+                        cpList[cpList.Count - 1].Delete();
+                        cpList.RemoveAt(cpList.Count - 1);
+                    }
+                    if (bList.Count > 0)
+                    {
+                        bList[bList.Count - 1].Delete();
+                        bList.RemoveAt(bList.Count - 1);
+                    }
+                    if (File.Exists(CSV_FILE))
+                    {
+                        var lines = File.ReadAllLines(CSV_FILE);
+                        if (lines.Length > 0)
+                            File.WriteAllLines(CSV_FILE, lines.Take(lines.Length - 1).ToArray());
+                    }
+                    if (next > 1)
+                    {
+                        next--;
+                        Notification.Show($"Coords {next} deleted");
+                    }
+                }
             }
         }
 
@@ -84,29 +170,37 @@ namespace CoordinateRecorder
 
         void WriteToFile(float closeby, bool routed)
         {
-            try
+            var last = GetLastCheckpoint();
+            if (World.GetDistance(last, pos) > 20f)
             {
-                using (StreamWriter sw = new StreamWriter(@".\scripts\CoordRecorder_CSV.txt", true))
+                AddCheckpoint(pos, next, routed);
+                if (cpList.Count > 10)
                 {
-                    string line = String.Format(CultureInfo.GetCultureInfo("en-US"), "{0},{1},{2},{3},{4},{5}", pos.X, pos.Y, pos.Z, heading, closeby, routed);
-                    sw.WriteLine(line);
+                    cpList[0].Delete();
+                    cpList.RemoveAt(0);
                 }
-                Notification.Show("Coords saved! " + text.Caption);
+                AddBlip(pos, next, routed);
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(CSV_FILE, true))
+                    {
+                        string line = String.Format(cInfo, "{0},{1},{2},{3},{4},{5}", pos.X, pos.Y, pos.Z, heading, closeby, routed);
+                        sw.WriteLine(line);
+                    }
+                    Notification.Show($"Coords {next} saved");
+                    next++;
+                }
+                catch
+                {
+                    Notification.Show($"Failed to save coords {next}");
+                }
             }
-            catch
-            {
-                Notification.Show("Failed to save coords!");
-            }
+            else
+                Notification.Show($"Too close to coords {next - 1}");
         }
 
-        private void Teleport()
+        void Teleport(Vector3 location)
         {
-            Vector3 location = World.WaypointPosition;
-            if (location == Vector3.Zero)
-            {
-                Notification.Show("Select teleport destination first!");
-                return;
-            }
             int i = 0;
             float groundHeight;
             do
@@ -124,6 +218,50 @@ namespace CoordinateRecorder
                 i++;
             }
             while (groundHeight == 0 && i < 20);
+        }
+
+        Vector3 GetLastCheckpoint()
+        {
+            next = 1;
+            if (File.Exists(CSV_FILE))
+            {
+                var lines = File.ReadAllLines(CSV_FILE);
+                if (lines.Length > 0)
+                {
+                    next = lines.Length + 1;
+                    var line = lines[lines.Length - 1].Split(',');
+                    if (line.Length >= 3)
+                        return new Vector3(float.Parse(line[0], cInfo), float.Parse(line[1], cInfo), float.Parse(line[2], cInfo));
+                }
+            }
+            return Vector3.Zero;
+        }
+
+        void AddCheckpoint(Vector3 position, int number, bool routed)
+        {
+            while (number > 99)
+                number -= 100;
+            CheckpointCustomIcon icon = new CheckpointCustomIcon(CheckpointCustomIconStyle.Number, Convert.ToByte(number));
+            Color cpColor;
+            if (routed)
+                cpColor = Color.GreenYellow;
+            else
+                cpColor = Color.OrangeRed;
+            cpList.Add(World.CreateCheckpoint(icon, position, position, 10f, cpColor));
+        }
+
+        void AddBlip(Vector3 position, int number, bool routed)
+        {
+            while (number > 99)
+                number -= 100;
+            BlipColor bColor;
+            if (routed)
+                bColor = BlipColor.Yellow;
+            else
+                bColor = BlipColor.Red;
+            bList.Add(World.CreateBlip(position));
+            bList[bList.Count - 1].NumberLabel = number;
+            bList[bList.Count - 1].Color = bColor;
         }
     }
 }

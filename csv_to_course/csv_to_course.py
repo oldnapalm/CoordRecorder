@@ -12,7 +12,7 @@ else:
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input", "-i", type=str, required=False, default=os.path.join(SCRIPT_DIR, 'CoordRecorder_CSV.txt'))
-parser.add_argument("--output", "-o", type=str, required=False, default=os.path.join(SCRIPT_DIR, '1000-1.0.0.json'))
+parser.add_argument("--output", "-o", type=str, required=False, default=os.path.join(SCRIPT_DIR, '1000-1.0.json'))
 parser.add_argument("--name", "-n", type=str, required=False)
 parser.add_argument("--offset_x", "-ox", type=float, required=False, default=0.0)
 parser.add_argument("--offset_y", "-oy", type=float, required=False, default=0.0)

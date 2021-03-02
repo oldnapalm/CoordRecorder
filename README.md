@@ -6,7 +6,10 @@ Updated CoordRecorder for [GTBikeV](https://www.gtbikev.com/) course creation.
 - Shows coordinates on top center of screen
 - Press `F9` to enable/disable the mod
 - Press `Shift` + `F9` to teleport to selected waypoint
-- When the mod is enabled, press `F10` to save current coordinates to file
+- Press `Control` + `Shift` + `F9` to teleport to last saved coordinates
+- When the mod is enabled
+  - Press `F10` to save current coordinates to file
+  - Press `Shift` + `Backspace` to delete last saved coordinates
 
 ## Installation
 - Put `CoordRecorder.dll` and `CoordRecorder.ini` in the `Scripts` folder
@@ -34,16 +37,22 @@ Save one more point close to the start point to be used as the start banner. Pla
 
 Save a waypoint close to (or aligned with) the start banner, because the rider will spawn heading to the first waypoint.
 
-### Add waypoints
+### Add routed waypoints
 - Add a waypoint in the map
   - Use the map zoom when placing the waypoint and make sure the GPS route is fine
 - Activate GTBikeV-tester and use the keys `+` and `-` to set the speed
 - We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
 - Press `F10` to save coords to file
+  - Press `Control` + `F10` to save with modified close-by range
+
+### Add unrouted waypoints
+- Disable **Auto drive** (or deactivate GTBikeV-tester) and ride in a straight line to the waypoint position
+- Press `Shift` + `F10` to save coords as unrouted waypoint
+  - Press `Control` + `Shift` + `F10` to save with modified close-by range
 
 The last saved point will be used as the finish banner. Player heading will be used for banner rotation.
 
-When finished adding waypoints, use `csv_to_course` to read the file `CoordRecorder_CSV.txt` and save the file `1000-1.0.0.json`
+When finished adding waypoints, use `csv_to_course` to read the file `CoordRecorder_CSV.txt` and save the file `1000-1.0.json`
 
 `csv_to_course` copies the formatted data to the clipboard, you can paste it in https://gtagmodding.com/maps/gta5/ (multi-find) to view the points on the map.
 
@@ -51,7 +60,7 @@ When finished adding waypoints, use `csv_to_course` to read the file `CoordRecor
 
 ## Testing courses
 
-- Drop the file `1000-1.0.0.json` into the `ModSettings` folder
+- Drop the file `1000-1.0.json` into the `ModSettings` folder
 - Reload the scripts (type `Reload()` in the console or press the key configured in `ScriptHookVDotNet.ini`)
 - Activate GTBikeV-tester and use the keys `+` and `-` to set the speed
   - The speed is adjusted when the rider is climbing or descending, so the simulation should be a bit more realistic than using constant power, since we usually put more power on climbs and less on downhill
@@ -59,7 +68,7 @@ When finished adding waypoints, use `csv_to_course` to read the file `CoordRecor
 - Rename the `.json` and `.fit` files using proper `Id` and `Version` values
 - Edit the file `courses.json` accordingly
   ```
-  {"Id":1000,"Version":"1.0.0"}
+  {"Id":1000,"Version":"1.0"}
   ```
 
 ## Tutorial video
