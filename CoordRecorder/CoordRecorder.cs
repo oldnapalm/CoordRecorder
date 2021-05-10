@@ -203,6 +203,7 @@ namespace CoordinateRecorder
         {
             int i = 0;
             float groundHeight;
+            location.Z = -50;
             do
             {
                 Wait(50);
