@@ -10,10 +10,12 @@ Updated CoordRecorder for [GTBikeV](https://www.gtbikev.com/) course creation.
 - When the mod is enabled
   - Press `F10` to save current coordinates to file
   - Press `Shift` + `Backspace` to delete last saved coordinates
+  - Press `Shift` + `F10` to toggle between routed and unrouted waypoint
+  - Press `Control` + `F10` to toggle between default and modified close-by range
 
 ## Installation
 - Put `CoordRecorder.dll` and `CoordRecorder.ini` in the `Scripts` folder
-- Optionally, open `CoordRecorder.ini` and change the keys
+- Optionally, open `CoordRecorder.ini` to change the keys and close-by ranges
 - The requirements should be satisfied if you have already installed GTBikeV
 
 ## Downloads
@@ -40,15 +42,14 @@ Save a waypoint close to (or aligned with) the start banner, because the rider w
 ### Add routed waypoints
 - Add a waypoint in the map
   - Use the map zoom when placing the waypoint and make sure the GPS route is fine
-- Activate GTBikeV-tester and use the keys `+` and `-` to set the speed
+- Activate GTBikeV-tester and use the keys `+` and `-` to set the power
 - We could teleport to the next waypoint but we want to make sure the auto drive will follow the planned route
 - Press `F10` to save coords to file
-  - Press `Control` + `F10` to save with modified close-by range
 
 ### Add unrouted waypoints
 - Disable **Auto drive** (or deactivate GTBikeV-tester) and ride in a straight line to the waypoint position
-- Press `Shift` + `F10` to save coords as unrouted waypoint
-  - Press `Control` + `Shift` + `F10` to save with modified close-by range
+- Toggle to `unrouted` using `Shift` + `F10`
+- Press `F10` to save coords to file
 
 The last saved point will be used as the finish banner. Player heading will be used for banner rotation.
 
@@ -56,14 +57,12 @@ When finished adding waypoints, use `csv_to_course` to read the file `CoordRecor
 
 `csv_to_course` copies the formatted data to the clipboard, you can paste it in https://gtagmodding.com/maps/gta5/ (multi-find) to view the points on the map.
 
-[![Map](https://github.com/oldnapalm/CoordRecorder/blob/master/images/map.png?raw=true)](https://gtagmodding.com/maps/gta5/)
-
 ## Testing courses
 
 - Drop the file `1000-1.0.json` into the `ModSettings` folder
 - Reload the scripts (type `Reload()` in the console or press the key configured in `ScriptHookVDotNet.ini`)
-- Activate GTBikeV-tester and use the keys `+` and `-` to set the speed
-  - The speed is adjusted when the rider is climbing or descending, so the simulation should be a bit more realistic than using constant power, since we usually put more power on climbs and less on downhill
+- Activate GTBikeV-tester and use the keys `+` and `-` to set the power
+  - The power is adjusted when the rider is climbing or descending, so the simulation should be a bit more realistic than using constant power, since we usually put more power on climbs and less on downhill
 - After riding the course, select `End and save current activity` and copy the `.fit` file to the `ModSettings` folder
 - Rename the `.json` and `.fit` files using proper `Id` and `Version` values
 - Edit the file `courses.json` accordingly

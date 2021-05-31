@@ -13,7 +13,7 @@ namespace CoordinateRecorder
 {
     public class CoordRecorder : Script
     {
-        const int PANEL_WIDTH = 360;
+        const int PANEL_WIDTH = 500;
         const int PANEL_HEIGHT = 20;
         Color backColor = Color.FromArgb(100, 255, 255, 255);
         Color textColor = Color.Black;
@@ -25,6 +25,10 @@ namespace CoordinateRecorder
         Keys enableKey;
         Keys saveKey;
         bool enable;
+        bool routed = true;
+        int closeby;
+        int defaultCloseBy;
+        int modifiedCloseBy;
 
         Vector3 pos;
         float heading;
@@ -35,8 +39,12 @@ namespace CoordinateRecorder
         public CoordRecorder()
         {
             LoadSettings();
-            this.Tick += OnTick;
-            this.KeyDown += OnKeyDown;
+            container = new ContainerElement(new Point((int)GTA.UI.Screen.Width / 2 - PANEL_WIDTH / 2, 0), new Size(PANEL_WIDTH, PANEL_HEIGHT), backColor);
+            text = new TextElement("", new Point(PANEL_WIDTH / 2, 0), 0.42f, textColor, GTA.UI.Font.Pricedown, Alignment.Center);
+            container.Items.Add(text);
+            Tick += OnTick;
+            KeyDown += OnKeyDown;
+            Aborted += OnAbort;
         }
 
         void OnTick(object sender, EventArgs e)
@@ -48,8 +56,8 @@ namespace CoordinateRecorder
                 {
                     pos = player.Character.Position;
                     heading = player.Character.Heading;
-                    text.Caption = String.Format("next:{0} x:{1} y:{2} z:{3} heading:{4}", next, pos.X.ToString("0.0"),
-                                                 pos.Y.ToString("0.0"), pos.Z.ToString("0.0"), heading.ToString("0.0"));
+                    text.Caption = string.Format("next:{0} ({1}routed) closeby:{2} x:{3} y:{4} z:{5} heading:{6}", next, routed ? "" : "un", closeby,
+                                                 pos.X.ToString("0"), pos.Y.ToString("0"), pos.Z.ToString("0"), heading.ToString("0"));
                     container.Draw();
                 }
             }
@@ -77,10 +85,8 @@ namespace CoordinateRecorder
                     enable = !enable;
                     if (enable)
                     {
-                        var last = GetLastCheckpoint();
-                        if (last != Vector3.Zero)
+                        if (GetLastCheckpoint() != Vector3.Zero)
                         {
-                            Teleport(last);
                             var lines = File.ReadAllLines(CSV_FILE);
                             for (int i = 9; i >= 0; i--)
                             {
@@ -106,28 +112,19 @@ namespace CoordinateRecorder
                         }
                     }
                     else
-                    {
-                        foreach (Checkpoint cp in cpList)
-                            cp.Delete();
-                        cpList.Clear();
-                        foreach (Blip b in bList)
-                            b.Delete();
-                        bList.Clear();
-                    }
+                        DeleteWayPoints();
                 }
             }
             if (enable)
             {
                 if (e.KeyCode == saveKey)
                 {
-                    if (e.Modifiers == (Keys.Control | Keys.Shift))
-                        WriteToFile(10, false);
-                    else if (e.Modifiers == Keys.Control)
-                        WriteToFile(10, true);
+                    if (e.Modifiers == Keys.Control)
+                        closeby = closeby == defaultCloseBy ? modifiedCloseBy : defaultCloseBy;
                     else if (e.Modifiers == Keys.Shift)
-                        WriteToFile(20, false);
+                        routed = !routed;
                     else
-                        WriteToFile(20, true);
+                        WriteToFile();
                 }
                 else if (e.KeyCode == Keys.Back && e.Modifiers == Keys.Shift)
                 {
@@ -156,22 +153,37 @@ namespace CoordinateRecorder
             }
         }
 
+        void DeleteWayPoints()
+        {
+            foreach (Checkpoint cp in cpList)
+                cp.Delete();
+            cpList.Clear();
+            foreach (Blip b in bList)
+                b.Delete();
+            bList.Clear();
+        }
+
+        void OnAbort(object sender, EventArgs e)
+        {
+            Tick -= OnTick;
+            KeyDown -= OnKeyDown;
+            DeleteWayPoints();
+        }
+
         void LoadSettings()
         {
             ScriptSettings settings = ScriptSettings.Load(@".\scripts\CoordRecorder.ini");
-            this.enable = settings.GetValue<bool>("Core", "Enable", false);
-            this.enableKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue<string>("Core", "EnableKey", "F9"), true);
-            this.saveKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue<string>("Core", "SaveKey", "F10"), true);
-
-            container = new ContainerElement(new Point((int)GTA.UI.Screen.Width / 2 - PANEL_WIDTH / 2, 0), new Size(PANEL_WIDTH, PANEL_HEIGHT), backColor);
-            text = new TextElement("", new Point(PANEL_WIDTH / 2, 0), 0.42f, textColor, GTA.UI.Font.Pricedown, Alignment.Center);
-            container.Items.Add(text);
+            enable = settings.GetValue("Core", "Enable", false);
+            enableKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue("Core", "EnableKey", "F9"), true);
+            saveKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue("Core", "SaveKey", "F10"), true);
+            defaultCloseBy = settings.GetValue("Core", "DefaultCloseBy", 20);
+            modifiedCloseBy = settings.GetValue("Core", "ModifiedCloseBy", 10);
+            closeby = defaultCloseBy;
         }
 
-        void WriteToFile(float closeby, bool routed)
+        void WriteToFile()
         {
-            var last = GetLastCheckpoint();
-            if (World.GetDistance(last, pos) > 20f)
+            if (World.GetDistance(GetLastCheckpoint(), pos) > modifiedCloseBy)
             {
                 AddCheckpoint(pos, next, routed);
                 if (cpList.Count > 10)
@@ -184,7 +196,7 @@ namespace CoordinateRecorder
                 {
                     using (StreamWriter sw = new StreamWriter(CSV_FILE, true))
                     {
-                        string line = String.Format(cInfo, "{0},{1},{2},{3},{4},{5}", pos.X, pos.Y, pos.Z, heading, closeby, routed);
+                        string line = string.Format(cInfo, "{0},{1},{2},{3},{4},{5}", pos.X, pos.Y, pos.Z, heading, closeby, routed);
                         sw.WriteLine(line);
                     }
                     Notification.Show($"Coords {next} saved");
