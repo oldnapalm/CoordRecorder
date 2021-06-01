@@ -29,6 +29,7 @@ namespace CoordinateRecorder
         int closeby;
         int defaultCloseBy;
         int modifiedCloseBy;
+        int checkpointRadius;
 
         Vector3 pos;
         float heading;
@@ -178,6 +179,7 @@ namespace CoordinateRecorder
             saveKey = (Keys)Enum.Parse(typeof(Keys), settings.GetValue("Core", "SaveKey", "F10"), true);
             defaultCloseBy = settings.GetValue("Core", "DefaultCloseBy", 20);
             modifiedCloseBy = settings.GetValue("Core", "ModifiedCloseBy", 10);
+            checkpointRadius = settings.GetValue("Core", "CheckpointRadius", 10);
             closeby = defaultCloseBy;
         }
 
@@ -260,7 +262,7 @@ namespace CoordinateRecorder
                 cpColor = Color.GreenYellow;
             else
                 cpColor = Color.OrangeRed;
-            cpList.Add(World.CreateCheckpoint(icon, position, position, 10f, cpColor));
+            cpList.Add(World.CreateCheckpoint(icon, position, position, checkpointRadius, cpColor));
         }
 
         void AddBlip(Vector3 position, int number, bool routed)

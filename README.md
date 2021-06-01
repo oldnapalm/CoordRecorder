@@ -15,7 +15,7 @@ Updated CoordRecorder for [GTBikeV](https://www.gtbikev.com/) course creation.
 
 ## Installation
 - Put `CoordRecorder.dll` and `CoordRecorder.ini` in the `Scripts` folder
-- Optionally, open `CoordRecorder.ini` to change the keys and close-by ranges
+- Optionally, open `CoordRecorder.ini` and edit preferences
 - The requirements should be satisfied if you have already installed GTBikeV
 
 ## Downloads
