@@ -79,7 +79,17 @@ with open(json_file, 'w', encoding='utf-8') as fd:
 
 print(f'File {json_file} saved.')
 
-m = folium.Map(location=[-50, 50], min_zoom=3, max_zoom=7, zoom_start=4, crs='Simple', tiles='https://cdn.mapgenie.io/images/tiles/gta5/los-santos/satellite/{z}/{x}/{y}.png', attr='<a href="https://mapgenie.io/">Map Genie</a>')
+m = folium.Map(location=[-50, 50], min_zoom=3, max_zoom=7, zoom_start=4, crs='Simple', tiles=None)
+satellite = folium.TileLayer(min_zoom=3, max_zoom=7, zoom_start=4, tiles='https://cdn.mapgenie.io/images/tiles/gta5/los-santos/satellite/{z}/{x}/{y}.png', attr='<a href="https://mapgenie.io/">Map Genie</a>')
+satellite.layer_name = "Satellite"
+satellite.add_to(m)
+atlas = folium.TileLayer(min_zoom=3, max_zoom=7, zoom_start=4, tiles='https://cdn.mapgenie.io/images/tiles/gta5/los-santos/atlas/{z}/{x}/{y}.png', attr='<a href="https://mapgenie.io/">Map Genie</a>')
+atlas.layer_name = "Atlas"
+atlas.add_to(m)
+road = folium.TileLayer(min_zoom=3, max_zoom=7, zoom_start=4, tiles='https://cdn.mapgenie.io/images/tiles/gta5/los-santos/road/{z}/{x}/{y}.png', attr='<a href="https://mapgenie.io/">Map Genie</a>')
+road.layer_name = "Road"
+road.add_to(m)
+folium.map.LayerControl().add_to(m)
 for name, c in enumerate(coords):
     model = ''
     try:
