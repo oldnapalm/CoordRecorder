@@ -53,9 +53,7 @@ Save a waypoint close to (or aligned with) the start banner, because the rider w
 
 The last saved point will be used as the finish banner. Player heading will be used for banner rotation.
 
-When finished adding waypoints, use `csv_to_course` to read the file `CoordRecorder_CSV.txt` and save the file `1000-1.0.json`
-
-`csv_to_course` copies the formatted data to the clipboard, you can paste it in https://gtagmodding.com/maps/gta5/ (multi-find) to view the points on the map.
+When finished adding waypoints, use `csv_to_course` to read the file `CoordRecorder_CSV.txt` and save the files `1000-1.0.json` and `1000-1.0.html`
 
 ## Testing courses
 

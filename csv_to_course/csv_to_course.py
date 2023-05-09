@@ -2,7 +2,7 @@ import os, sys
 import csv
 import json
 import argparse
-import pyperclip
+import folium
 
 if getattr(sys, 'frozen', False):
     # If we're running as a pyinstaller bundle
@@ -21,6 +21,8 @@ args = parser.parse_args()
 
 csv_file = args.input
 json_file = args.output
+html_file = f'{os.path.splitext(json_file)[0]}.html'
+
 ox = args.offset_x
 oy = args.offset_y
 oz = args.offset_z
@@ -68,10 +70,8 @@ start = { 'Name': 'prop_tri_start_banner', 'Position': point(coords[1]), 'Rotati
 data['Props'].append(start)
 finish = { 'Name': 'prop_tri_finish_banner', 'Position': point(coords[-1]), 'Rotation': heading(coords[-1]) }
 data['Props'].append(finish)
-del coords[0:2]
-del coords[-1]
 data['WayPointList'] = []
-for c in coords:
+for c in coords[2:-1]:
     data['WayPointList'].append(point(c))
 
 with open(json_file, 'w', encoding='utf-8') as fd:
@@ -79,21 +79,23 @@ with open(json_file, 'w', encoding='utf-8') as fd:
 
 print(f'File {json_file} saved.')
 
-clipboard = ''
+m = folium.Map(location=[-50, 50], min_zoom=3, max_zoom=7, zoom_start=4, crs='Simple', tiles='https://cdn.mapgenie.io/images/tiles/gta5/los-santos/satellite/{z}/{x}/{y}.png', attr='<a href="https://mapgenie.io/">Map Genie</a>')
 for name, c in enumerate(coords):
     model = ''
     try:
         if c[5] == 'False':
-            model = 'Unrouted'
+            model = '<br><b>Unrouted</b>'
         closeby = float(c[4])
         if closeby != 20 and closeby > 0:
-            model += f'\tClose-by\t{closeby}'
+            model += f'<br><b>Close-by:</b> {closeby}'
     except:
         pass
-    clipboard += f'{c[0]},{c[1]},{c[2]},{name},{model}\n'
-pyperclip.copy(clipboard)
+    iframe = folium.IFrame(f'<b>{name}</b><br><br><b>Lat:</b> {c[0]}<br><b>Long:</b> {c[1]}<br><b>Alt:</b> {c[2]}{model}', width=200, height=150)
+    popup = folium.Popup(iframe, max_width=200)
+    folium.Marker(location=[float(c[1]) * 0.00691 - 58, float(c[0]) * 0.00691 + 39.4], popup=popup).add_to(m)
+m.save(html_file)
 
-print('Data for https://gtagmodding.com/maps/gta5/ copied to clipboard.')
+print(f'File {html_file} saved.')
 
 if getattr(sys, 'frozen', False):
     input()
